@@ -1,0 +1,6 @@
+@Store.Menna.API_HostAddress = http://localhost:5227
+
+GET {{Store.Menna.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
