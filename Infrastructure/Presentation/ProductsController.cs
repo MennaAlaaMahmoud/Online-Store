@@ -10,14 +10,14 @@ namespace Presentation
 {
     // Api
     [ApiController]
-     [Route("api/[controller]")]
-    public class ProductsController (IServiceManager serviceManager) : ControllerBase
+    [Route("api/[controller]")]
+    public class ProductsController(IServiceManager serviceManager) : ControllerBase
     {
 
         [HttpGet] // endpoint : Get: /api/products
         public async Task<IActionResult> GetAllProducts()
         {
-           var result = await serviceManager.ProductService.GetAllProductsAsync();
+            var result = await serviceManager.ProductService.GetAllProductsAsync();
             if (result is null) return BadRequest(); // 400
             return Ok(result); // 200                                       
 
@@ -52,7 +52,7 @@ namespace Presentation
             if (result is null) return BadRequest(); // 400
             return Ok(result); // 200
         }
-        
+    }
 }
 
 
