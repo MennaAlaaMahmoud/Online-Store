@@ -1,9 +1,12 @@
 
+using AutoMapper;
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Data;
-
+using Services;
+using ServicesAbstractions;
+using AssemblyMapping = Services.AssemblyReference;
 namespace Store.Menna.API
 {
     public class Program
@@ -26,6 +29,9 @@ namespace Store.Menna.API
             });
 
             builder.Services.AddScoped<IDbInitializer, DbInitializer>(); // Allow DI Form DbInitializer
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Allow DI Form UnitOfWork
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.AddAutoMapper(typeof(AssemblyMapping).Assembly);
 
             var app = builder.Build();
 
