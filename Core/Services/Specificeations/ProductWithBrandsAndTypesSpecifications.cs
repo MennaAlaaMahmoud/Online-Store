@@ -15,7 +15,7 @@ namespace Services.Specificeations
 
         }
 
-        public ProductWithBrandsAndTypesSpecifications(int? brandId, int? typeId)
+        public ProductWithBrandsAndTypesSpecifications(int? brandId, int? typeId, string? sort)
             : base(
 
                   p =>
@@ -26,7 +26,10 @@ namespace Services.Specificeations
         {
             ApplyInclude();
 
+            ApplySorting(sort);
+
         }
+
 
         private void ApplyInclude()
         {
@@ -34,5 +37,33 @@ namespace Services.Specificeations
             AddInclude(p => p.productType);
         }
 
+        private void ApplySorting(string? sort)
+        {
+            if (string.IsNullOrEmpty(sort))
+            {
+                switch (sort.ToLower())
+                {
+
+                    case "namedesc":
+                        AddOrderByDescending(p => p.Name);
+                        break;
+                    case "priceasc":
+                        AddOrderBy(p => p.Price);
+                        break;
+                    case "pricedesc":
+                        AddOrderByDescending(p => p.Price);
+                        break;
+                    default:
+                        AddOrderBy(p => p.Name);
+                        break;
+                }
+            }
+            else
+            {
+                AddOrderBy(p => p.Name);
+            }
+        }
     }
+
+        
 }

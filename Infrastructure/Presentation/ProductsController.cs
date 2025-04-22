@@ -13,11 +13,16 @@ namespace Presentation
     [Route("api/[controller]")]
     public class ProductsController(IServiceManager serviceManager) : ControllerBase
     {
+        // sort : nameasc [default]
+        // sort : namedesc 
+        // sort : pricDesc
+        // sort : priceAsc
+
 
         [HttpGet] // endpoint : Get: /api/products
-        public async Task<IActionResult> GetAllProducts(int? brandId , int? typeId)
+        public async Task<IActionResult> GetAllProducts(int? brandId , int? typeId , string? sort)
         {
-            var result = await serviceManager.ProductService.GetAllProductsAsync(brandId,typeId );
+            var result = await serviceManager.ProductService.GetAllProductsAsync(brandId,typeId,sort );
             if (result is null) return BadRequest(); // 400
             return Ok(result); // 200                                       
 
@@ -52,6 +57,10 @@ namespace Presentation
             if (result is null) return BadRequest(); // 400
             return Ok(result); // 200
         }
+
+
+
+
     }
 }
 
