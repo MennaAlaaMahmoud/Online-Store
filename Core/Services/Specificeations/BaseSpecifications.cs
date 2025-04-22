@@ -19,7 +19,6 @@ namespace Services.Specificeations
         {
             Criteria = expression;
 
-
         }
 
         protected void AddInclude(Expression<Func<TEntity, object>> expression )
