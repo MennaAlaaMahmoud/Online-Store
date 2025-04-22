@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ServicesAbstractions;
+using Shared;
 
 namespace Presentation
 {
@@ -20,9 +21,9 @@ namespace Presentation
 
 
         [HttpGet] // endpoint : Get: /api/products
-        public async Task<IActionResult> GetAllProducts(int? brandId , int? typeId , string? sort , int pageIndex = 1 , int pageSize = 5)
+        public async Task<IActionResult> GetAllProducts([FromQuery]ProductSpecificationsParamters  specParams)
         {
-            var result = await serviceManager.ProductService.GetAllProductsAsync(brandId,typeId,sort ,pageIndex,pageSize);
+            var result = await serviceManager.ProductService.GetAllProductsAsync(specParams);
             if (result is null) return BadRequest(); // 400
             return Ok(result); // 200                                       
 
