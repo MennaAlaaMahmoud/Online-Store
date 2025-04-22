@@ -20,9 +20,9 @@ namespace Presentation
 
 
         [HttpGet] // endpoint : Get: /api/products
-        public async Task<IActionResult> GetAllProducts(int? brandId , int? typeId , string? sort)
+        public async Task<IActionResult> GetAllProducts(int? brandId , int? typeId , string? sort , int pageIndex = 1 , int pageSize = 5)
         {
-            var result = await serviceManager.ProductService.GetAllProductsAsync(brandId,typeId,sort );
+            var result = await serviceManager.ProductService.GetAllProductsAsync(brandId,typeId,sort ,pageIndex,pageSize);
             if (result is null) return BadRequest(); // 400
             return Ok(result); // 200                                       
 

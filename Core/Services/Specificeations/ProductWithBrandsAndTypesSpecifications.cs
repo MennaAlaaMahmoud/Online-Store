@@ -15,7 +15,7 @@ namespace Services.Specificeations
 
         }
 
-        public ProductWithBrandsAndTypesSpecifications(int? brandId, int? typeId, string? sort)
+        public ProductWithBrandsAndTypesSpecifications(int? brandId, int? typeId, string? sort, int pageIndex , int pageSize )
             : base(
 
                   p =>
@@ -27,7 +27,7 @@ namespace Services.Specificeations
             ApplyInclude();
 
             ApplySorting(sort);
-
+            ApplyPagination(pageIndex, pageSize);
         }
 
 
@@ -35,6 +35,7 @@ namespace Services.Specificeations
         {
             AddInclude(p => p.productBrand);
             AddInclude(p => p.productType);
+
         }
 
         private void ApplySorting(string? sort)
@@ -63,6 +64,7 @@ namespace Services.Specificeations
                 AddOrderBy(p => p.Name);
             }
         }
+
     }
 
         
