@@ -7,7 +7,7 @@ using Domain.Models;
 
 namespace Services.Specificeations
 {
-    public class ProductWithBrandsAndTypesSpecifications : BaseSpecifications<Product,int> 
+    public class ProductWithBrandsAndTypesSpecifications : BaseSpecifications<Product, int>
     {
         public ProductWithBrandsAndTypesSpecifications(int id) : base(p => p.Id == id)
         {
@@ -15,7 +15,14 @@ namespace Services.Specificeations
 
         }
 
-        public ProductWithBrandsAndTypesSpecifications() : base(null)
+        public ProductWithBrandsAndTypesSpecifications(int? brandId, int? typeId)
+            : base(
+
+                  p =>
+                  (!brandId.HasValue || p.BrandId == brandId) &&
+                  (!typeId.HasValue || p.TypeId == typeId)
+
+                  )
         {
             ApplyInclude();
 
