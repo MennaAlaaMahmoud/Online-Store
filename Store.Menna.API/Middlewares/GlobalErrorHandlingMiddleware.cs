@@ -1,4 +1,5 @@
-﻿using Shared.ErrorModels;
+﻿using Domain.Exaptions;
+using Shared.ErrorModels;
 
 namespace Store.Menna.API.Middlewares
 {
@@ -30,14 +31,21 @@ namespace Store.Menna.API.Middlewares
                 // 2. Set the response content type
                 // 3. Set the response Object (body)
                 // 4. Return the response
-                context.Response.StatusCode =StatusCodes.Status500InternalServerError;
+                //context.Response.StatusCode =StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
 
                 var response = new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status500InternalServerError,
                     ErrorMessage = ex.Message
                 };
+                response.StatusCode = ex switch
+                {
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    => StatusCodes.Status500InternalServerError
+                };
+                context.Response.StatusCode = response.StatusCode;
+
+
 
                 await context.Response.WriteAsJsonAsync(response);
 
