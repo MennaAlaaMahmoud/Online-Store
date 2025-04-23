@@ -6,6 +6,7 @@ using Persistence;
 using Persistence.Data;
 using Services;
 using ServicesAbstractions;
+using Store.Menna.API.Middlewares;
 using AssemblyMapping = Services.AssemblyReference;
 namespace Store.Menna.API
 {
@@ -43,6 +44,7 @@ namespace Store.Menna.API
             await dbInitializer.InitializAsync();
             #endregion
 
+            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 
             // Configure the HTTP request pipeline.
