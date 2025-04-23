@@ -20,6 +20,7 @@ namespace Services.Specificeations
             : base(
 
                   p =>
+                  (string.IsNullOrEmpty(specParams.Search) || p.Name.ToLower().Contains(specParams.Search.ToLower()))&&
                   (!specParams.BrandId.HasValue || p.BrandId == specParams.BrandId) &&
                   (!specParams.TypeId.HasValue || p.TypeId == specParams.TypeId)
 
