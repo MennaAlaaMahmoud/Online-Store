@@ -12,8 +12,4 @@
     <None Remove="Exceptions\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Exaptions\" />
-  </ItemGroup>
-
 </Project>
