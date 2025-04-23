@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Models;
+using Shared;
 
 namespace Services.Specificeations
 {
@@ -15,19 +16,19 @@ namespace Services.Specificeations
 
         }
 
-        public ProductWithBrandsAndTypesSpecifications(int? brandId, int? typeId, string? sort, int pageIndex , int pageSize )
+        public ProductWithBrandsAndTypesSpecifications(ProductSpecificationsParamters specParams)
             : base(
 
                   p =>
-                  (!brandId.HasValue || p.BrandId == brandId) &&
-                  (!typeId.HasValue || p.TypeId == typeId)
+                  (!specParams.BrandId.HasValue || p.BrandId == specParams.BrandId) &&
+                  (!specParams.TypeId.HasValue || p.TypeId == specParams.TypeId)
 
                   )
         {
             ApplyInclude();
 
-            ApplySorting(sort);
-            ApplyPagination(pageIndex, pageSize);
+            ApplySorting(specParams.Sort);
+            ApplyPagination(specParams.PageIndex,specParams.PageSize);
         }
 
 
@@ -38,11 +39,11 @@ namespace Services.Specificeations
 
         }
 
-        private void ApplySorting(string? sort)
+        private void ApplySorting(string? Sort)
         {
-            if (string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(Sort))
             {
-                switch (sort.ToLower())
+                switch (Sort.ToLower())
                 {
 
                     case "namedesc":
