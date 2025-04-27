@@ -41,8 +41,8 @@ namespace Presentation
         }
 
 
-        [HttpGet("badrequest/{id}")] // Get : /api/buggy/badrequest
-        public IActionResult GetBadRequest(int id) // Validation Error
+        [HttpGet("badrequest/{id}/{age}")] // Get : /api/buggy/badrequest
+        public IActionResult GetBadRequest(int id , int age) // Validation Error
         {
             // Code
             return BadRequest(); // 400 Bad Request
