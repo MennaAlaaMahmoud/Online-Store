@@ -8,8 +8,8 @@ using Persistence.Data;
 using Services;
 using ServicesAbstractions;
 using Shared.ErrorModels;
+using Store.Menna.API.Extensions;
 using Store.Menna.API.Middlewares;
-using AssemblyMapping = Services.AssemblyReference;
 namespace Store.Menna.API
 {
     public class Program
@@ -18,74 +18,23 @@ namespace Store.Menna.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+    
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+
+            builder.Services.AddApplicationServices();
 
 
-            builder.Services.AddDbContext<StoreDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
+            builder.Services.RegisterServices(builder.Configuration);
 
-            builder.Services.AddScoped<IDbInitializer, DbInitializer>(); // Allow DI Form DbInitializer
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Allow DI Form UnitOfWork
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
-            builder.Services.AddAutoMapper(typeof(AssemblyMapping).Assembly);
-            builder.Services.Configure<ApiBehaviorOptions>(config =>
-            {
-                config.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-                  var errors =  actionContext.ModelState.Where(m => m.Value.Errors.Any())
-                                            .Select(m => new ValidationError()
-                                            {
-                                                Field = m.Key,
-                                                Errors = m.Value.Errors.Select(errors => errors.ErrorMessage)
-                                            });
-
-                    var response = new ValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(response);
-
-                }; 
-            });
 
 
             var app = builder.Build();
 
-
-            #region Seeding
-
-            using var scope = app.Services.CreateScope();
-            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>(); // ASK CLR Create Object From DbInitializer
-            await dbInitializer.InitializAsync();
-            #endregion
-
-            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
-
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
+           await app.ConfigureMiddleware();
 
             app.Run();
+
         }
     }
 }
