@@ -19,7 +19,16 @@ namespace Store.Menna.API.Middlewares
             try
             {
                 await _next.Invoke(context);
-
+                if(context.Response.StatusCode == StatusCodes.Status404NotFound)
+                {
+                    context.Response.ContentType = "application/json";
+                    var response = new ErrorDetails()
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = $"End Point {context.Request.Path} is Not Found"
+                    };
+                    await context.Response.WriteAsJsonAsync(response);
+                }
             }
             catch (Exception ex)
             {
@@ -41,7 +50,7 @@ namespace Store.Menna.API.Middlewares
                 response.StatusCode = ex switch
                 {
                     NotFoundException => StatusCodes.Status404NotFound,
-                    => StatusCodes.Status500InternalServerError
+                    _ => StatusCodes.Status500InternalServerError
                 };
                 context.Response.StatusCode = response.StatusCode;
 
