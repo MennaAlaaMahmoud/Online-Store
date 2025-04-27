@@ -1,11 +1,13 @@
 
 using AutoMapper;
 using Domain.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Data;
 using Services;
 using ServicesAbstractions;
+using Shared.ErrorModels;
 using Store.Menna.API.Middlewares;
 using AssemblyMapping = Services.AssemblyReference;
 namespace Store.Menna.API
@@ -33,6 +35,26 @@ namespace Store.Menna.API
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Allow DI Form UnitOfWork
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddAutoMapper(typeof(AssemblyMapping).Assembly);
+            builder.Services.Configure<ApiBehaviorOptions>(config =>
+            {
+                config.InvalidModelStateResponseFactory = (actionContext) =>
+                {
+                  var errors =  actionContext.ModelState.Where(m => m.Value.Errors.Any())
+                                            .Select(m => new ValidationError()
+                                            {
+                                                Field = m.Key,
+                                                Errors = m.Value.Errors.Select(errors => errors.ErrorMessage)
+                                            });
+
+                    var response = new ValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+
+                }; 
+            });
+
 
             var app = builder.Build();
 
