@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
-using Domain.Exaptions;
+using Domain.Exceptions;
 using Domain.Models;
 using Services.Specificeations;
 using ServicesAbstractions;
