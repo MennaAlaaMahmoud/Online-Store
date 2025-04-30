@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Exaptions
+namespace Domain.Exceptions
 {
     public abstract class NotFoundException(string message ) : Exception(message)
     {

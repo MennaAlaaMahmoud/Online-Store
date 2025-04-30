@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Data;
+using Persistence.Data.Repositories;
+using StackExchange.Redis;
 
 namespace Persistence
 {
@@ -24,7 +26,11 @@ namespace Persistence
 
             services.AddScoped<IDbInitializer, DbInitializer>(); // Allow DI Form DbInitializer
             services.AddScoped<IUnitOfWork, UnitOfWork>(); // Allow DI Form UnitOfWork
-
+            services.AddScoped<IBasketRepository, BasketRepository>(); // Allow DI Form UnitOfWork
+            services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
+            {
+                return ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!);
+            });
 
             return services;
         }
