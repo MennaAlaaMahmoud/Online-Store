@@ -27,6 +27,7 @@ namespace Persistence
             services.AddScoped<IDbInitializer, DbInitializer>(); // Allow DI Form DbInitializer
             services.AddScoped<IUnitOfWork, UnitOfWork>(); // Allow DI Form UnitOfWork
             services.AddScoped<IBasketRepository, BasketRepository>(); // Allow DI Form UnitOfWork
+            services.AddScoped<ICacheRepository, CacheRepository>(); // Allow DI Form UnitOfWork
             services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
             {
                 return ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!);
