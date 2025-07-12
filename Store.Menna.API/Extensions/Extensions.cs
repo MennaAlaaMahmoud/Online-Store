@@ -1,5 +1,8 @@
 ﻿using Domain.Contracts;
+using Domain.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Identity;
 using Shared.ErrorModels;
 using Store.Menna.API.Middlewares;
 
@@ -15,6 +18,7 @@ namespace Store.Menna.API.Extensions
             services.AddSwaggerServices();
 
             services.ConfigureServices();
+            services.AddIdentityServices();
 
 
             return services;
@@ -31,6 +35,18 @@ namespace Store.Menna.API.Extensions
             return services;
 
         }
+
+
+        private static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        {
+
+            services.AddIdentity<AppUser, IdentityRole>()
+                    .AddEntityFrameworkStores<StoreIdentityDbContext>();
+
+            return services;
+
+        }
+
 
 
         private static IServiceCollection AddSwaggerServices(this IServiceCollection services)
@@ -112,6 +128,7 @@ namespace Store.Menna.API.Extensions
             using var scope = app.Services.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>(); // ASK CLR Create Object From DbInitializer
             await dbInitializer.InitializAsync();
+            await dbInitializer.InitializIdentityAsync();
             #endregion
 
 
